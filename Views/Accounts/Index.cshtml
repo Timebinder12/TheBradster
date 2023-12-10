@@ -1,4 +1,4 @@
-﻿@model IEnumerable<TheBradster.Models.Accounts>
+﻿@model IEnumerable<TheBradster.Models.Account>
 
 @{
     ViewData["Title"] = "Index";
@@ -16,7 +16,7 @@
                 @Html.DisplayNameFor(model => model.FirstName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.LastName)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]">Last Name</a>
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Email)
@@ -28,13 +28,13 @@
                 @Html.DisplayNameFor(model => model.Address)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.City)
+                @Html.DisplayNameFor(model => model.Address.City)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.State)
+                @Html.DisplayNameFor(model => model.Address.State)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Zip)
+                @Html.DisplayNameFor(model => model.Address.Zip)
             </th>
             <th></th>
         </tr>
@@ -55,16 +55,16 @@
                 @Html.DisplayFor(modelItem => item.Phone)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Address)
+                @Html.DisplayFor(modelItem => item.Address.AddressLine)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.City)
+                    @Html.DisplayFor(modelItem => item.Address.City)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.State)
+                    @Html.DisplayFor(modelItem => item.Address.State)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Zip)
+                    @Html.DisplayFor(modelItem => item.Address.Zip)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

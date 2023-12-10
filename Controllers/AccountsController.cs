@@ -6,9 +6,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TheBradster.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.Data.SqlClient;
 
 namespace TheBradster.Controllers
 {
+    [Authorize(Roles = "Administrator, Manager")]
     public class AccountsController : Controller
     {
         private readonly AccountsContext _context;
@@ -19,11 +22,24 @@ namespace TheBradster.Controllers
         }
 
         // GET: Accounts
-        public async Task<IActionResult> Index()
+        public IActionResult Index(string sortOrder)
         {
-              return _context.Accounts != null ? 
-                          View(await _context.Accounts.ToListAsync()) :
-                          Problem("Entity set 'AccountsContext.Accounts'  is null.");
+
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+
+            var accounts = from e in _context.Accounts.Include(e => e.Address)
+                           select e;
+
+            switch(sortOrder)
+            {
+                case "name_desc":
+                    accounts = accounts.OrderByDescending(e => e.LastName);
+                    break;
+                default:
+                    accounts = accounts.OrderBy(e => e.LastName);
+                    break;
+            }
+            return View(accounts);
         }
 
         // GET: Accounts/Details/5
@@ -55,7 +71,7 @@ namespace TheBradster.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,Email,Phone,Address,City,State,Zip")] Accounts accounts)
+        public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,Email,Phone,Address,City,State,Zip")] Account accounts)
         {
             if (ModelState.IsValid)
             {
@@ -88,7 +104,7 @@ namespace TheBradster.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName,Email,Phone,Address,City,State,Zip")] Accounts accounts)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName,Email,Phone,Address,City,State,Zip")] Account accounts)
         {
             if (id != accounts.Id)
             {

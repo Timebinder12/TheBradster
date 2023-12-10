@@ -1,0 +1,72 @@
+﻿@model TheBradster.Models.Music
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Music</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Artist)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Artist)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.UploadedDate)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.UploadedDate)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.FilePath)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FilePath)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.OwnerId)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.OwnerId)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Album)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Album)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Genre)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Genre)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CoverImage)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CoverImage)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.MusicId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

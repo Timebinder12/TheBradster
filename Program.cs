@@ -19,13 +19,35 @@ namespace TheBradster
 
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            // builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            //     .AddEntityFrameworkStores<ApplicationDbContext>();
+            builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
+                 .AddDefaultUI()
+                 .AddEntityFrameworkStores<ApplicationDbContext>()
+                 .AddDefaultTokenProviders();
 
             builder.Services.AddDbContext<AccountsContext>(options =>
                 options.UseSqlServer(connectionString));
 
             builder.Services.AddControllersWithViews();
+
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy("readpolicy",
+                    builder => builder.RequireRole("Administrator", "Manager", "User"));
+                options.AddPolicy("writepolicy",
+                    builder => builder.RequireRole("Administrator", "Manager"));
+            });
+
+            builder.Services.Configure<IdentityOptions>(options =>
+            {
+                //Default Password Settings
+                options.Password.RequireUppercase = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequiredLength = 10;
+                options.Password.RequireDigit = true;
+                options.Password.RequiredUniqueChars = 1;
+            });
 
             var app = builder.Build();
 
