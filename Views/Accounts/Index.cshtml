@@ -28,13 +28,13 @@
                 @Html.DisplayNameFor(model => model.Address)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Address.City)
+                @Html.DisplayNameFor(model => model.Address.FirstOrDefault().City)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Address.State)
+                @Html.DisplayNameFor(model => model.Address.FirstOrDefault().State)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Address.Zip)
+                @Html.DisplayNameFor(model => model.Address.FirstOrDefault().Zip)
             </th>
             <th></th>
         </tr>
@@ -55,16 +55,16 @@
                 @Html.DisplayFor(modelItem => item.Phone)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Address.AddressLine)
+                    @Html.DisplayFor(modelItem => item.Address.FirstOrDefault().AddressLine)
             </td>
             <td>
-                    @Html.DisplayFor(modelItem => item.Address.City)
+                    @Html.DisplayFor(modelItem => item.Address.FirstOrDefault().City)
             </td>
             <td>
-                    @Html.DisplayFor(modelItem => item.Address.State)
+                    @Html.DisplayFor(modelItem => item.Address.FirstOrDefault().State)
             </td>
             <td>
-                    @Html.DisplayFor(modelItem => item.Address.Zip)
+                    @Html.DisplayFor(modelItem => item.Address.FirstOrDefault().Zip)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

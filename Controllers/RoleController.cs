@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace TheBradster.Controllers
 {
-    [Authorize(Roles = "Administrator")]
+    //[Authorize(Roles = "Administrator")]
     public class RoleController : Controller
     {
         RoleManager<IdentityRole> roleManager;

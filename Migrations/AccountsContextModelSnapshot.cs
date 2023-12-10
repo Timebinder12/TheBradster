@@ -75,6 +75,9 @@ namespace TheBradster.Migrations
                     b.Property<int>("Id")
                         .HasColumnType("int");
 
+                    b.Property<int>("AccountId")
+                        .HasColumnType("int");
+
                     b.Property<string>("AddressLine")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
@@ -98,6 +101,7 @@ namespace TheBradster.Migrations
                         new
                         {
                             Id = 1,
+                            AccountId = 0,
                             AddressLine = "123 Main St",
                             City = "Main City",
                             State = "Main State",
@@ -106,6 +110,7 @@ namespace TheBradster.Migrations
                         new
                         {
                             Id = 2,
+                            AccountId = 0,
                             AddressLine = "456 Main St",
                             City = "Main City",
                             State = "Main State",
@@ -120,6 +125,9 @@ namespace TheBradster.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MusicId"), 1L, 1);
+
+                    b.Property<int>("AccountId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Album")
                         .HasColumnType("nvarchar(max)");
@@ -140,9 +148,6 @@ namespace TheBradster.Migrations
                     b.Property<string>("Genre")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("OwnerId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -150,12 +155,9 @@ namespace TheBradster.Migrations
                     b.Property<DateTime?>("UploadedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("accountId")
-                        .HasColumnType("int");
-
                     b.HasKey("MusicId");
 
-                    b.HasIndex("accountId");
+                    b.HasIndex("AccountId");
 
                     b.ToTable("Music");
                 });
@@ -163,8 +165,8 @@ namespace TheBradster.Migrations
             modelBuilder.Entity("TheBradster.Models.Address", b =>
                 {
                     b.HasOne("TheBradster.Models.Account", "Account")
-                        .WithOne("Address")
-                        .HasForeignKey("TheBradster.Models.Address", "Id")
+                        .WithMany("Address")
+                        .HasForeignKey("Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -173,17 +175,18 @@ namespace TheBradster.Migrations
 
             modelBuilder.Entity("TheBradster.Models.Music", b =>
                 {
-                    b.HasOne("TheBradster.Models.Account", "account")
+                    b.HasOne("TheBradster.Models.Account", "Account")
                         .WithMany("Music")
-                        .HasForeignKey("accountId");
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("account");
+                    b.Navigation("Account");
                 });
 
             modelBuilder.Entity("TheBradster.Models.Account", b =>
                 {
-                    b.Navigation("Address")
-                        .IsRequired();
+                    b.Navigation("Address");
 
                     b.Navigation("Music");
                 });

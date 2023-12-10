@@ -41,22 +41,22 @@
             @Html.DisplayFor(model => model.Address)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Address.City)
+            @Html.DisplayNameFor(model => model.Address.FirstOrDefault().City)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Address.City)
+            @Html.DisplayFor(model => model.Address.FirstOrDefault().City)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Address.State)
+            @Html.DisplayNameFor(model => model.Address.FirstOrDefault().State)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Address.State)
+            @Html.DisplayFor(model => model.Address.FirstOrDefault().State)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Address.Zip)
+            @Html.DisplayNameFor(model => model.Address.FirstOrDefault().Zip)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Address.Zip)
+            @Html.DisplayFor(model => model.Address.FirstOrDefault().Zip)
         </dd>
     </dl>
 </div>

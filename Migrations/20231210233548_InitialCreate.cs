@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace TheBradster.Migrations
 {
-    public partial class Initial : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -18,9 +18,7 @@ namespace TheBradster.Migrations
                     FirstName = table.Column<string>(name: "First Name", type: "nvarchar(50)", maxLength: 50, nullable: false),
                     LastName = table.Column<string>(name: "Last Name", type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -35,7 +33,8 @@ namespace TheBradster.Migrations
                     AddressLine = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     City = table.Column<string>(type: "nvarchar(35)", maxLength: 35, nullable: true),
                     State = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    Zip = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Zip = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AccountId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -56,10 +55,9 @@ namespace TheBradster.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Artist = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UploadedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UploadedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     FilePath = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    OwnerId = table.Column<int>(type: "int", nullable: false),
-                    accountId = table.Column<int>(type: "int", nullable: true),
+                    AccountId = table.Column<int>(type: "int", nullable: false),
                     Album = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Genre = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -69,36 +67,37 @@ namespace TheBradster.Migrations
                 {
                     table.PrimaryKey("PK_Music", x => x.MusicId);
                     table.ForeignKey(
-                        name: "FK_Music_Accounts_accountId",
-                        column: x => x.accountId,
+                        name: "FK_Music_Accounts_AccountId",
+                        column: x => x.AccountId,
                         principalTable: "Accounts",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
                 table: "Accounts",
-                columns: new[] { "Id", "Email", "First Name", "Last Name", "Password", "Phone", "UserName" },
-                values: new object[] { 1, "shanereed28@gmail.com", "Shane", "Reed", "password", null, "Timebinder" });
+                columns: new[] { "Id", "Email", "First Name", "Last Name", "Phone" },
+                values: new object[] { 1, "shanereed28@gmail.com", "Shane", "Reed", null });
 
             migrationBuilder.InsertData(
                 table: "Accounts",
-                columns: new[] { "Id", "Email", "First Name", "Last Name", "Password", "Phone", "UserName" },
-                values: new object[] { 2, "brad@informationpathways.com", "Brad", "Reed", "password", null, "Bradster" });
+                columns: new[] { "Id", "Email", "First Name", "Last Name", "Phone" },
+                values: new object[] { 2, "brad@informationpathways.com", "Brad", "Reed", null });
 
             migrationBuilder.InsertData(
                 table: "Addresses",
-                columns: new[] { "Id", "AddressLine", "City", "State", "Zip" },
-                values: new object[] { 1, "123 Main St", "Main City", "Main State", "10000" });
+                columns: new[] { "Id", "AccountId", "AddressLine", "City", "State", "Zip" },
+                values: new object[] { 1, 0, "123 Main St", "Main City", "Main State", "10000" });
 
             migrationBuilder.InsertData(
                 table: "Addresses",
-                columns: new[] { "Id", "AddressLine", "City", "State", "Zip" },
-                values: new object[] { 2, "456 Main St", "Main City", "Main State", "20000" });
+                columns: new[] { "Id", "AccountId", "AddressLine", "City", "State", "Zip" },
+                values: new object[] { 2, 0, "456 Main St", "Main City", "Main State", "20000" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Music_accountId",
+                name: "IX_Music_AccountId",
                 table: "Music",
-                column: "accountId");
+                column: "AccountId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
