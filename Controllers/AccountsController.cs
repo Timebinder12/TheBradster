@@ -6,12 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TheBradster.Models;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.Data.SqlClient;
 
 namespace TheBradster.Controllers
 {
-    [Authorize(Roles = "Administrator, Manager")]
     public class AccountsController : Controller
     {
         private readonly AccountsContext _context;
@@ -22,24 +19,11 @@ namespace TheBradster.Controllers
         }
 
         // GET: Accounts
-        public IActionResult Index(string sortOrder)
+        public async Task<IActionResult> Index()
         {
-
-            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
-
-            var accounts = from e in _context.Accounts.Include(e => e.Address)
-                           select e;
-
-            switch(sortOrder)
-            {
-                case "name_desc":
-                    accounts = accounts.OrderByDescending(e => e.LastName);
-                    break;
-                default:
-                    accounts = accounts.OrderBy(e => e.LastName);
-                    break;
-            }
-            return View(accounts);
+              return _context.Accounts != null ? 
+                          View(await _context.Accounts.ToListAsync()) :
+                          Problem("Entity set 'AccountsContext.Accounts'  is null.");
         }
 
         // GET: Accounts/Details/5
@@ -50,14 +34,14 @@ namespace TheBradster.Controllers
                 return NotFound();
             }
 
-            var accounts = await _context.Accounts
+            var account = await _context.Accounts
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (accounts == null)
+            if (account == null)
             {
                 return NotFound();
             }
 
-            return View(accounts);
+            return View(account);
         }
 
         // GET: Accounts/Create
@@ -71,15 +55,15 @@ namespace TheBradster.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,Email,Phone,Address,City,State,Zip")] Account accounts)
+        public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,Email,Phone")] Account account)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(accounts);
+                _context.Add(account);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(accounts);
+            return View(account);
         }
 
         // GET: Accounts/Edit/5
@@ -90,13 +74,12 @@ namespace TheBradster.Controllers
                 return NotFound();
             }
 
-            var accounts = await _context.Accounts.FindAsync(id);
-            if (accounts == null)
+            var account = await _context.Accounts.FindAsync(id);
+            if (account == null)
             {
                 return NotFound();
             }
-            ViewBag.FirstName = accounts.FirstName;
-            return View(accounts);
+            return View(account);
         }
 
         // POST: Accounts/Edit/5
@@ -104,9 +87,9 @@ namespace TheBradster.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName,Email,Phone,Address,City,State,Zip")] Account accounts)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName,Email,Phone")] Account account)
         {
-            if (id != accounts.Id)
+            if (id != account.Id)
             {
                 return NotFound();
             }
@@ -115,12 +98,12 @@ namespace TheBradster.Controllers
             {
                 try
                 {
-                    _context.Update(accounts);
+                    _context.Update(account);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!AccountsExists(accounts.Id))
+                    if (!AccountExists(account.Id))
                     {
                         return NotFound();
                     }
@@ -131,7 +114,7 @@ namespace TheBradster.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(accounts);
+            return View(account);
         }
 
         // GET: Accounts/Delete/5
@@ -142,14 +125,14 @@ namespace TheBradster.Controllers
                 return NotFound();
             }
 
-            var accounts = await _context.Accounts
+            var account = await _context.Accounts
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (accounts == null)
+            if (account == null)
             {
                 return NotFound();
             }
-            ViewBag.FirstName = accounts.FirstName;
-            return View(accounts);
+
+            return View(account);
         }
 
         // POST: Accounts/Delete/5
@@ -161,17 +144,17 @@ namespace TheBradster.Controllers
             {
                 return Problem("Entity set 'AccountsContext.Accounts'  is null.");
             }
-            var accounts = await _context.Accounts.FindAsync(id);
-            if (accounts != null)
+            var account = await _context.Accounts.FindAsync(id);
+            if (account != null)
             {
-                _context.Accounts.Remove(accounts);
+                _context.Accounts.Remove(account);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool AccountsExists(int id)
+        private bool AccountExists(int id)
         {
           return (_context.Accounts?.Any(e => e.Id == id)).GetValueOrDefault();
         }

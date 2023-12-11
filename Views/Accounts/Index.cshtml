@@ -2,39 +2,28 @@
 
 @{
     ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Member List</h1>
+<h1>Index</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table table-hover">
+<table class="table">
     <thead>
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.FirstName)
             </th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]">Last Name</a>
+                @Html.DisplayNameFor(model => model.LastName)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Email)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Phone)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Address)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Address.FirstOrDefault().City)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Address.FirstOrDefault().State)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Address.FirstOrDefault().Zip)
             </th>
             <th></th>
         </tr>
@@ -53,18 +42,6 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Phone)
-            </td>
-            <td>
-                    @Html.DisplayFor(modelItem => item.Address.FirstOrDefault().AddressLine)
-            </td>
-            <td>
-                    @Html.DisplayFor(modelItem => item.Address.FirstOrDefault().City)
-            </td>
-            <td>
-                    @Html.DisplayFor(modelItem => item.Address.FirstOrDefault().State)
-            </td>
-            <td>
-                    @Html.DisplayFor(modelItem => item.Address.FirstOrDefault().Zip)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +9,6 @@ using TheBradster.Models;
 
 namespace TheBradster.Controllers
 {
-    [Authorize(Roles ="Administrator, Manager")]
     public class AddressesController : Controller
     {
         private readonly AccountsContext _context;
@@ -58,7 +56,7 @@ namespace TheBradster.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,AddressLine,City,State,Zip")] Address address)
+        public async Task<IActionResult> Create([Bind("Id,AddressLine,City,State,Zip,AccountId")] Address address)
         {
             if (ModelState.IsValid)
             {
@@ -92,7 +90,7 @@ namespace TheBradster.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,AddressLine,City,State,Zip")] Address address)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,AddressLine,City,State,Zip,AccountId")] Address address)
         {
             if (id != address.Id)
             {
